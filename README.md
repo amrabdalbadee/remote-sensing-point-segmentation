@@ -158,15 +158,15 @@ If you use this code in your research, please cite:
 ```bibtex
 @software{remote_sensing_segmentation,
   title={Remote Sensing Point Segmentation Framework},
-  author={Your Name},
+  author={Amr M.Abdalbadee},
   year={2024},
-  url={https://github.com/yourusername/remote-sensing-point-segmentation}
+  url={https://github.com/amrabdalbadee/remote-sensing-point-segmentation}
 }
 ```
 
 ## Contact
 
-For questions or issues, please open an issue on GitHub or contact [your.email@example.com]
+For questions or issues, please open an issue on GitHub or contact [amrabdalbadee@gmail.com]
 
 ## Acknowledgments
 

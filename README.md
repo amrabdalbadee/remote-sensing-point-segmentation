@@ -1,22 +1,41 @@
-Point-Supervised Remote Sensing Image Segmentation
-A comprehensive implementation of partial cross-entropy loss for point-supervised semantic segmentation on remote sensing imagery.
+# Remote Sensing Point Segmentation
 
-📋 Project Overview
-This project implements weakly-supervised semantic segmentation using point annotations instead of full pixel-wise labels. Point annotations are much faster to create, making this approach practical for large-scale remote sensing applications.
+A deep learning framework for point cloud segmentation in remote sensing applications, featuring advanced sampling strategies and partial cross-entropy loss implementation.
 
-Key Features
-✅ Partial Cross-Entropy Loss implementation for sparse supervision
-✅ Multiple Point Sampling Strategies: Random, Centroid, Boundary-aware, Grid
-✅ Modular Architecture: Clean, extensible codebase
-✅ U-Net Implementation with customizable depth
-✅ Comprehensive Metrics: IoU, Dice, Pixel Accuracy
-✅ Experiment Tracking: Automated logging and visualization
-✅ Ready for Remote Sensing Datasets: LoveDA, DeepGlobe, etc.
-🚀 Quick Start
-1. Installation
-bash
+## Project Structure
+
+```
+remote-sensing-point-segmentation/
+├── config/                     # Configuration files
+│   ├── default.yaml            # Default configuration settings
+│   └── experiment_configs/     # Experiment-specific configurations
+├── data/                       # Dataset storage directory
+├── src/                        # Source code
+│   ├── losses.py               # Partial CE Loss implementation
+│   ├── point_sampling.py       # Point cloud sampling strategies
+│   ├── models/                 # Neural network model architectures
+│   ├── datasets/               # Dataset loaders and processors
+│   ├── utils/                  # Utility functions and helpers
+│   └── training/               # Training loop and related scripts
+├── scripts/                    # Executable scripts for running experiments
+├── experiments/                # Experiment results and logs
+├── notebooks/                  # Jupyter notebooks for analysis
+└── tests/                      # Unit tests and integration tests
+```
+
+## Features
+
+- **Partial Cross-Entropy Loss**: Custom loss function for handling partially labeled data
+- **Advanced Sampling Strategies**: Multiple point cloud sampling techniques for efficient processing
+- **Modular Architecture**: Easy to extend and customize for different tasks
+- **Experiment Tracking**: Built-in support for experiment management and logging
+- **Configuration Management**: YAML-based configuration system for reproducible experiments
+
+## Installation
+
+```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/amrabdalbadee/remote-sensing-point-segmentation.git
 cd remote-sensing-point-segmentation
 
 # Create virtual environment
@@ -25,188 +44,131 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
-2. Download Dataset
-bash
-# Example for LoveDA dataset
-bash scripts/download_data.sh
-Or manually download from:
+```
 
-LoveDA: https://github.com/Junjue-Wang/LoveDA
-DeepGlobe: https://www.kaggle.com/balraj98/deepglobe-land-cover-classification-dataset
-3. Prepare Data
-bash
-python scripts/preprocess_data.py --dataset loveda --data_dir ./data/raw
-4. Train Model
-bash
+## Usage
+
+### Training
+
+```bash
 # Train with default configuration
 python scripts/train.py --config config/default.yaml
 
-# Resume from checkpoint
-python scripts/train.py --config config/default.yaml --resume experiments/baseline/checkpoints/best_model.pth
-5. Evaluate Model
-bash
-python scripts/evaluate.py --checkpoint experiments/baseline/checkpoints/best_model.pth --config config/default.yaml
-📁 Project Structure
-remote-sensing-point-segmentation/
-├── config/                      # Configuration files
-│   ├── default.yaml            # Default hyperparameters
-│   └── experiment_configs/     # Experiment-specific configs
-├── data/                       # Dataset directory
-├── src/                        # Source code
-│   ├── losses.py              # ✅ Partial CE Loss
-│   ├── point_sampling.py      # ✅ Point sampling strategies
-│   ├── models/                # Network architectures
-│   ├── datasets/              # Dataset loaders
-│   ├── utils/                 # Utilities (metrics, visualization)
-│   └── training/              # Training logic
-├── scripts/                   # Executable scripts
-├── experiments/               # Experiment outputs
-├── notebooks/                 # Jupyter notebooks
-└── tests/                     # Unit tests
-🔬 Experiments
-Experiment 1: Effect of Number of Points
-Hypothesis: Increasing the number of point annotations improves performance with diminishing returns.
+# Train with custom experiment configuration
+python scripts/train.py --config config/experiment_configs/experiment_01.yaml
+```
 
-bash
-# Run with different numbers of points
-python scripts/run_experiments.py --experiment num_points
-Variables:
+### Evaluation
 
-Number of points per class: [1, 5, 10, 20, 50, 100]
-Baseline: Full supervision
-Experiment 2: Sampling Strategy Comparison
-Hypothesis: Strategic point placement (centroid, boundary) outperforms random sampling.
+```bash
+# Evaluate a trained model
+python scripts/evaluate.py --model_path experiments/model_checkpoint.pth --config config/default.yaml
+```
 
-bash
-# Compare sampling strategies
-python scripts/run_experiments.py --experiment sampling_strategy
-Strategies:
+### Inference
 
-Random sampling
-Centroid-based sampling
-Boundary-aware sampling
-Grid-based sampling
-📊 Results
-Results will be automatically saved to experiments/<experiment_name>/results/:
+```bash
+# Run inference on new data
+python scripts/inference.py --input data/test_samples/ --model_path experiments/model_checkpoint.pth
+```
 
-Training curves (loss, IoU)
-Confusion matrices
-Visualization of predictions
-Quantitative metrics (CSV/JSON)
-🧪 Usage Examples
-Using Different Point Sampling Strategies
-python
-from src.point_sampling import create_point_sampler
+## Configuration
 
-# Random sampling
-sampler = create_point_sampler('random', num_points_per_class=5)
+Edit `config/default.yaml` to customize:
 
-# Centroid-based sampling
-sampler = create_point_sampler('centroid', num_points_per_class=5, min_object_size=10)
+- Model architecture parameters
+- Training hyperparameters (learning rate, batch size, epochs)
+- Data augmentation settings
+- Loss function parameters
+- Sampling strategy configuration
 
-# Boundary-aware sampling
-sampler = create_point_sampler('boundary', num_points_per_class=5, boundary_thickness=5)
+Example configuration:
 
-# Grid sampling
-sampler = create_point_sampler('grid', grid_size=32)
+```yaml
+model:
+  name: PointNet++
+  num_classes: 10
+  
+training:
+  batch_size: 16
+  learning_rate: 0.001
+  epochs: 100
+  
+loss:
+  type: partial_ce
+  weight_unlabeled: 0.1
+```
 
-# Sample points from a mask
-point_labels, label_mask = sampler.sample(segmentation_mask)
-Using Partial Cross-Entropy Loss
-python
-from src.losses import PartialCrossEntropyLoss
+## Dataset Preparation
 
-# Create loss function
-criterion = PartialCrossEntropyLoss(ignore_index=255)
+Place your point cloud data in the `data/` directory with the following structure:
 
-# Compute loss
-loss = criterion(predictions, point_labels, label_mask)
-Custom Training Loop
-python
-from src.training.trainer import Trainer
+```
+data/
+├── train/
+│   ├── points/
+│   └── labels/
+├── val/
+│   ├── points/
+│   └── labels/
+└── test/
+    └── points/
+```
 
-trainer = Trainer(
-    model=model,
-    train_loader=train_loader,
-    val_loader=val_loader,
-    criterion=criterion,
-    optimizer=optimizer,
-    point_sampler=sampler,
-    num_classes=7,
-    device='cuda'
-)
+## Key Components
 
-history = trainer.train(num_epochs=100)
-📈 Visualization
-Explore results interactively:
+### Partial Cross-Entropy Loss (`src/losses.py`)
 
-bash
-jupyter notebook notebooks/03_results_analysis.ipynb
-🧪 Testing
-Run unit tests:
+Implements a custom loss function that handles partially labeled point clouds, allowing the model to learn from both labeled and unlabeled points.
 
-bash
-pytest tests/
-📝 Configuration
-Edit config/default.yaml to customize:
+### Point Sampling (`src/point_sampling.py`)
 
-Model architecture (U-Net variants)
-Point sampling strategy and parameters
-Training hyperparameters
-Data augmentation settings
-🎯 Key Implementation Details
-Partial Cross-Entropy Loss
-The loss only computes gradients for labeled pixels:
+Provides various sampling strategies including:
+- Random sampling
+- Farthest point sampling
+- Grid-based sampling
+- Density-aware sampling
 
-L = (1/N) Σ mask_i * CE(pred_i, target_i)
-where N is the number of labeled pixels.
+## Results
 
-Point Sampling
-Four strategies are implemented:
+Track your experiment results in the `experiments/` directory. Each experiment creates:
+- Model checkpoints
+- Training logs
+- Evaluation metrics
+- Visualization outputs
 
-Random: Uniform random sampling from each class
-Centroid: Samples from centers of connected components
-Boundary: Samples near object boundaries
-Grid: Regular grid sampling
-Evaluation
-Models are evaluated using:
+## Contributing
 
-Mean Intersection over Union (mIoU)
-Per-class IoU
-Dice coefficient
-Pixel accuracy
-Precision and Recall
-Importantly, evaluation is always on full masks, even when training with points.
-
-🐛 Troubleshooting
-Out of Memory (OOM)
-Reduce batch size in config/default.yaml
-Use model: light_unet for a smaller model
-Reduce image size
-Slow Training
-Increase num_workers in config
-Use mixed precision training (add to code)
-Use a smaller model variant
-Poor Performance
-Try more point annotations
-Experiment with different sampling strategies
-Increase training epochs
-Add data augmentation
-📚 References
-U-Net: Ronneberger et al., 2015
-LoveDA Dataset: Wang et al., 2021
-Point Supervision: Various weakly-supervised learning papers
-📄 License
-MIT License
-
-🤝 Contributing
 Contributions are welcome! Please:
 
-Fork the repository
-Create a feature branch
-Submit a pull request
-📧 Contact
-For questions or issues, please open a GitHub issue.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -m 'Add new feature'`)
+4. Push to the branch (`git push origin feature/new-feature`)
+5. Open a Pull Request
 
-Note: Make sure to update the dataset paths and configuration files based on your specific setup before running experiments.
+## License
 
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Citation
+
+If you use this code in your research, please cite:
+
+```bibtex
+@software{remote_sensing_segmentation,
+  title={Remote Sensing Point Segmentation Framework},
+  author={Your Name},
+  year={2024},
+  url={https://github.com/yourusername/remote-sensing-point-segmentation}
+}
+```
+
+## Contact
+
+For questions or issues, please open an issue on GitHub or contact [your.email@example.com]
+
+## Acknowledgments
+
+- Thanks to the open-source community for inspiration and tools
+- Built with PyTorch and other amazing libraries

@@ -159,7 +159,7 @@ If you use this code in your research, please cite:
 @software{remote_sensing_segmentation,
   title={Remote Sensing Point Segmentation Framework},
   author={Amr M.Abdalbadee},
-  year={2024},
+  year={2025},
   url={https://github.com/amrabdalbadee/remote-sensing-point-segmentation}
 }
 ```

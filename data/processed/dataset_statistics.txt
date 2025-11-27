@@ -1,0 +1,21 @@
+LoveDA Dataset Statistics
+============================================================
+
+Train Set:
+  Total samples: 2522
+  Urban: 1156
+  Rural: 1366
+
+Val Set:
+  Total samples: 1669
+  Urban: 677
+  Rural: 992
+
+Class Distribution (sampled):
+  background: 6.47%
+  building: 40.89%
+  road: 11.59%
+  water: 6.28%
+  barren: 11.24%
+  forest: 6.81%
+  agricultural: 16.73%

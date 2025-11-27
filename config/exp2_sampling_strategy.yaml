@@ -1,0 +1,45 @@
+# ============================================
+# Experiment 2: Sampling Strategy Comparison
+# File: config/exp2_sampling_strategy.yaml
+# ============================================
+
+experiment:
+  name: "exp2_sampling_strategies"
+  output_dir: "./experiments/exp2_strategies"
+  description: "Compare different point sampling strategies"
+
+seed: 42
+
+model:
+  type: "unet"
+  num_classes: 7
+  bilinear: true
+  base_channels: 64
+
+data:
+  root_dir: "./data/raw/LoveDA"
+  img_size: 256
+  augmentation: true
+  ignore_index: 255
+
+training:
+  # Point supervision - vary sampling strategy
+  use_point_supervision: true
+  sampling_strategy: "random"  # Options: random, centroid, boundary, grid
+  num_points_per_class: 10
+  
+  # Optimization
+  batch_size: 8
+  num_epochs: 10 #80
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  optimizer: "adam"
+  use_scheduler: true
+  num_workers: 4
+  log_interval: 10
+
+evaluation:
+  batch_size: 8
+  save_predictions: true
+  visualize_results: true
+  num_visualizations: 10

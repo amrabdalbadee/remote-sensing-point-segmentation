@@ -1,0 +1,49 @@
+# ============================================
+# Experiment 1: Effect of Number of Points
+# File: config/exp1_num_points.yaml
+# ============================================
+
+experiment:
+  name: "exp1_varying_points"
+  output_dir: "./experiments/exp1_num_points"
+  description: "Investigate effect of number of point annotations on performance"
+
+seed: 42
+
+model:
+  type: "unet"
+  num_classes: 7
+  bilinear: true
+  base_channels: 64
+
+data:
+  root_dir: "./data/raw/LoveDA"
+  img_size: 256
+  augmentation: true
+  ignore_index: 255
+
+training:
+  # Point supervision - vary this parameter
+  use_point_supervision: true
+  sampling_strategy: "random"
+  num_points_per_class: 10  # Vary: [1, 3, 5, 10, 20, 50]
+  
+  # Optimization
+  batch_size: 8
+  num_epochs: 10
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  optimizer: "adam"
+  use_scheduler: true
+  num_workers: 4
+  log_interval: 10
+
+evaluation:
+  batch_size: 8
+  save_predictions: true
+  visualize_results: true
+  num_visualizations: 10
+
+
+
+

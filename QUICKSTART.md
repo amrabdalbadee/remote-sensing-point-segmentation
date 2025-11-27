@@ -276,34 +276,6 @@ After running experiments:
 
 ---
 
-## 💡 Tips for Excellence
-
-### Code Quality
-- ✅ All code is already modular and documented
-- ✅ Follow PEP 8 style (use `black` formatter if needed)
-- ✅ Include docstrings (already provided)
-
-### Experiments
-- 🔥 **Run multiple seeds** (3-5) and report mean ± std
-- 🔥 **Statistical significance**: Use t-tests when comparing methods
-- 🔥 **Ablation study**: Show each component matters
-
-### Report Quality
-- 📊 High-quality figures (300 DPI, clear labels)
-- 📝 Clear writing (no jargon without explanation)
-- 🔢 Report all important hyperparameters
-- 🎯 Answer: "Could someone reproduce this?"
-
-### Going Above and Beyond
-1. **Add confidence intervals** to plots
-2. **Analyze failure cases** - show where the model struggles
-3. **Computational efficiency** - report training time, memory usage
-4. **Additional experiments:**
-   - Class imbalance handling
-   - Different network architectures
-   - Data augmentation impact
-
----
 
 ## 🐛 Troubleshooting
 
@@ -357,22 +329,3 @@ model:
 - **Point Supervision Survey:** Search for weakly-supervised segmentation papers
 
 ---
-
-## ✅ Checklist Before Submission
-
-- [ ] Code runs without errors
-- [ ] All experiments completed
-- [ ] Results saved and organized
-- [ ] Technical report written
-- [ ] Figures and tables included
-- [ ] Code is well-documented
-- [ ] Requirements.txt included
-- [ ] README.md updated
-- [ ] Deliverables packaged:
-  - Python files or Jupyter notebook ✓
-  - Technical report (PDF) ✓
-  - Supporting documents ✓
-
----
-
-**You're all set! Good luck with your technical assessment! 🚀**
